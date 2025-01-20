@@ -1,6 +1,17 @@
+import axios from "axios";
+import { useEffect } from "react";
 import { Link } from "react-router-dom"; // 追加
 
 function HomePage() {
+    useEffect(() => {
+        const fetch = async () => {
+            const url = "http://localhost:3000/user/profile";
+            const response = await axios.get(url);
+            console.log("レスポンス", response.data);
+        };
+        fetch();
+    }, []);
+
     return (
         <div className="Home">
             <h1>ホーム画面</h1>
