@@ -2,9 +2,13 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class UserService {
+  async getHello() {
+    // console.log(request);
+    return 'getHello service';
+  }
   // ログインユーザー情報を取得
   // todo: requestの型をRequestにするとcookiesでエラーが出るので要調査
-  async findBySession(request: any) {
+  async findBySession() {
     // 開発者ツールのネットワークタブの「cookies」タブから送信されたjwtを受け取る
     // const cookie = request.cookies['jwt'];
     // jwtをユーザー情報にデコード
@@ -15,7 +19,7 @@ export class UserService {
   }
 
   // ログアウト
-  async signOut(response: any) {
+  async signOut() {
     // ブラウザのcookieを削除
     // response.clearCookie('jwt');
     // return {
@@ -25,7 +29,8 @@ export class UserService {
   }
 
   // 新規登録
-  async singUp(createUserDto: any): Promise<any> {
+  async singUp(): Promise<any> {
+    // console.log(createUserDto);
     // const { username, password } = createUserDto;
     // const salt = await bcrypt.genSalt();
     // const hashpassword = await bcrypt.hash(password, salt);
@@ -44,7 +49,9 @@ export class UserService {
   }
 
   // ログイン
-  async signIn(credentialsDto: any, response: any): Promise<any> {
+  async signIn(): Promise<any> {
+    // console.log(credentialsDto);
+    // console.log(response);
     // const { username, password } = credentialsDto;
     // const user = await this.usersRepository.findOne({ username });
 
