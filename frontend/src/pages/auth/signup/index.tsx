@@ -1,9 +1,11 @@
+import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function SignUpPage() {
+    const navigate = useNavigate();
     const [valueObj, setValueObj] = useState({
-        user_id: "",
+        employee_number: "",
         password: "",
         confirmed_password: "",
     });
@@ -11,9 +13,46 @@ function SignUpPage() {
         setValueObj({ ...valueObj, [key]: value });
     };
 
+    const onSignup = async () => {
+        try {
+            const url = "http://localhost:3000/auth/signup";
+            const reqBody = {
+                ...valueObj,
+                name: "default_user",
+                role: "CUSTOMER",
+            };
+            const response = await axios.post(url, reqBody);
+            if (response.status === 200) {
+                setValueObj({
+                    employee_number: "",
+                    password: "",
+                    confirmed_password: "",
+                });
+                navigate("/signin");
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        if (valueObj.password !== valueObj.confirmed_password) {
+            return alert("パスワードが異なります");
+        } else if (
+            valueObj.employee_number &&
+            valueObj.employee_number.length !== 5
+        ) {
+            return alert("社員番号は5文字で入力してください");
+        } else if (
+            !valueObj.employee_number ||
+            !valueObj.password ||
+            !valueObj.confirmed_password
+        ) {
+            return alert("入力がない項目があります");
+        }
         console.log("サブミットされました", e.target);
+        onSignup();
     };
     return (
         <div className="Register">
@@ -21,9 +60,11 @@ function SignUpPage() {
             <form onSubmit={handleSubmit} className="Form">
                 <input
                     type="text"
-                    placeholder="ユーザーID"
-                    value={valueObj.user_id}
-                    onChange={(e) => handleChange("user_id", e.target.value)}
+                    placeholder="社員番号"
+                    value={valueObj.employee_number}
+                    onChange={(e) => {
+                        handleChange("employee_number", e.target.value);
+                    }}
                 />
                 <input
                     type="password"
