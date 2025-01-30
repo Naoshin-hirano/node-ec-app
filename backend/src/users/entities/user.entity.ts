@@ -19,8 +19,14 @@ export class User {
   readonly updatedAt?: Timestamp;
 
   @Column({ unique: true })
-  email: string;
+  employee_number: string;
 
-  @Column({ name: 'hashed_password' })
-  hashedPassword: string;
+  @Column({ name: 'password' })
+  password: string;
+
+  @Column({ name: 'name' })
+  name: string;
+
+  @Column({ name: 'role' })
+  role: string;
 }
