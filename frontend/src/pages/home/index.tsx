@@ -1,38 +1,29 @@
 import axios from "axios";
-import { Link } from "react-router-dom"; // 追加
+
+import { Link, useNavigate } from "react-router-dom"; // 追加
+import { userAtom } from "../../store/user";
+import { useAtom } from "jotai";
 
 // クッキーも一緒にリクエスト送信
 axios.defaults.withCredentials = true;
 
 function HomePage() {
-    const onLogin = () => {
+    const navigate = useNavigate();
+    const [user, setUser] = useAtom(userAtom);
+    const onLogout = () => {
         const fetch = async () => {
-            const url = "http://localhost:3000/user/signin";
+            const url = "http://localhost:3000/auth/logout";
             const response = await axios.post(url);
-            console.log("レスポンス", response.data);
+            if (response.status === 200) {
+                setUser(null);
+                navigate("/signin");
+            }
         };
         fetch();
     };
-
-    const onSignup = () => {
-        const fetch = async () => {
-            const url = "http://localhost:3000/user/signup";
-            const response = await axios.post(url);
-            console.log("レスポンスSignup", response.data);
-        };
-        fetch();
-    };
-
     return (
         <div className="Home">
             <h1>ホーム画面</h1>
-            <div>
-                <button onClick={onSignup}>登録</button>
-            </div>
-            <div>
-                <button onClick={onLogin}>ログイン</button>
-            </div>
-
             <div>
                 <div>
                     <Link to="/signup">signup画面へ</Link>
@@ -49,6 +40,12 @@ function HomePage() {
                 <div>
                     <Link to="/productList">商品一覧画面へ</Link>
                 </div>
+            </div>
+            <div>
+                <div>
+                    <button onClick={onLogout}>ログアウト</button>
+                </div>
+                <div>{!user ? "ログアウトしました" : "ログインしてます"}</div>
             </div>
         </div>
     );

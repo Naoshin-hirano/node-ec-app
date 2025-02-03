@@ -51,7 +51,14 @@ export class AuthController {
       logInUserDto.password,
     );
     session.user = user;
-    response.status(HttpStatus.OK).json({ name: user.name, role: user.role });
+    response.status(HttpStatus.OK).json({
+      user: {
+        id: user.id,
+        name: user.name,
+        employee_number: user.employee_number,
+        role: user.role,
+      },
+    });
   }
 
   @Post('logout')

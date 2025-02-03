@@ -1,9 +1,15 @@
 import axios from "axios";
+import { useAtom } from "jotai";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; // 追加
+import { userAtom } from "../../../store/user";
+
+// クッキーも一緒にリクエスト送信
+axios.defaults.withCredentials = true;
 
 function SignInPage() {
     const navigate = useNavigate();
+    const [, setUser] = useAtom(userAtom);
     const [valueObj, setValueObj] = useState({
         employee_number: "",
         password: "",
@@ -12,7 +18,7 @@ function SignInPage() {
         setValueObj({ ...valueObj, [key]: value });
     };
 
-    const onSignup = async () => {
+    const onLogin = async () => {
         try {
             const url = "http://localhost:3000/auth/login";
             const reqBody = {
@@ -24,6 +30,8 @@ function SignInPage() {
                     employee_number: "",
                     password: "",
                 });
+                console.log("login", response.data.user);
+                setUser(response.data.user);
                 navigate("/");
             }
         } catch (err) {
@@ -31,15 +39,14 @@ function SignInPage() {
         }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (valueObj.employee_number && valueObj.employee_number.length !== 5) {
             return alert("社員番号は5文字で入力してください");
         } else if (!valueObj.employee_number || !valueObj.password) {
             return alert("入力がない項目があります");
         }
-        console.log("サブミットされました", e.target);
-        onSignup();
+        onLogin();
     };
     return (
         <div className="Home">

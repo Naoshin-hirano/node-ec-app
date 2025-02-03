@@ -51,7 +51,6 @@ function SignUpPage() {
         ) {
             return alert("入力がない項目があります");
         }
-        console.log("サブミットされました", e.target);
         onSignup();
     };
     return (
