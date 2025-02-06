@@ -6,31 +6,28 @@ import SignInPage from "./pages/auth/signin";
 import CheckOutPage from "./pages/chekout";
 import ProductDetailPage from "./pages/product-detail";
 import ProductListPage from "./pages/product-list";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect } from "react";
 import PrivateLayout from "./components/layout/PrivateLayout";
 import PublicLayout from "./components/layout/PublicLayout";
 import { useAtom } from "jotai";
 import { userAtom } from "./store/user";
-
-// クッキーも一緒にリクエスト送信
-axios.defaults.withCredentials = true;
+import { loadingAtom } from "./store/loadiing";
+import { ApiClient } from "./core/api/apiClient";
 
 function App() {
     const [user, setUser] = useAtom(userAtom);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useAtom(loadingAtom);
 
     useEffect(() => {
         const fetch = async () => {
             try {
-                const url = "http://localhost:3000/user/getme";
-                const response = await axios.get(url);
+                const response = await ApiClient.get("/user/getme");
                 const userObj = response.data.user;
                 setUser(userObj);
                 setLoading(false);
             } catch (err) {
-                setLoading(false);
                 console.log(err);
+                setLoading(false);
             }
         };
         fetch();
