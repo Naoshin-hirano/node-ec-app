@@ -27,6 +27,9 @@ function HomePage() {
                     <Link to="/signin">signin画面へ</Link>
                 </div>
                 <div>
+                    <Link to="/userSetting">ユーザー設定画面へ</Link>
+                </div>
+                <div>
                     <Link to="/checkout">checkout画面へ</Link>
                 </div>
                 <div>

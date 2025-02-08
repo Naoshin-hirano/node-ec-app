@@ -39,6 +39,22 @@ export class AuthController {
     }
   }
 
+  @Post('delete')
+  @HttpCode(HttpStatus.OK)
+  async delete(
+    @Body() employee_number: string,
+    @Session() session: Record<string, any>,
+    @Res() response: Response,
+  ) {
+    try {
+      await this.userService.delete(employee_number);
+      session.destroy();
+      response.status(HttpStatus.OK).json({ message: 'メンバー退会完了' });
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
   @Post('login')
   @HttpCode(HttpStatus.OK)
   async logIn(

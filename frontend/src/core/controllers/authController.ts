@@ -11,6 +11,16 @@ export const signUp = (body: any) => {
 };
 
 /**
+ * ユーザーアカウント削除
+ * @param employee_number
+ * @returns
+ */
+export const deleteAccount = (body: any) => {
+    const service = new AuthorityService().delete(body);
+    return service;
+};
+
+/**
  * ユーザーログイン
  * @param body
  * @returns

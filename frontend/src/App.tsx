@@ -13,6 +13,7 @@ import { useAtom } from "jotai";
 import { userAtom } from "./store/user";
 import { loadingAtom } from "./store/loadiing";
 import { getMe } from "./core/controllers/userController";
+import UserSettingPage from "./ui/pages/auth/setting";
 
 function App() {
     const [user, setUser] = useAtom(userAtom);
@@ -40,6 +41,7 @@ function App() {
                 <Route path="/checkout" element={<CheckOutPage />} />
                 <Route path="/productDetail" element={<ProductDetailPage />} />
                 <Route path="/productList" element={<ProductListPage />} />
+                <Route path="/userSetting" element={<UserSettingPage />} />
                 <Route path="*" element={<NotFoundPage />} />
             </Route>
             <Route element={<PublicLayout />}>

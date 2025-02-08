@@ -17,6 +17,16 @@ export class AuthorityService {
     }
 
     /**
+     * ユーザーアカウント削除
+     * @param body
+     * @returns
+     */
+    public async delete(body: any) {
+        const response = await ApiClient.post("/auth/delete", body);
+        return response.data;
+    }
+
+    /**
      * ユーザーログイン
      * @param body
      * @returns

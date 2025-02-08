@@ -15,6 +15,10 @@ export class UserService {
     return this.userRepository.save(signUpDto);
   }
 
+  delete(employee_number: string) {
+    return this.userRepository.delete(employee_number);
+  }
+
   findByUsername(employee_number: string) {
     return this.userRepository.findOneBy({ employee_number });
   }
