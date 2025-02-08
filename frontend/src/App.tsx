@@ -1,18 +1,18 @@
 import { Routes, Route } from "react-router-dom"; // 追加
-import SignUpPage from "./pages/auth/signup";
-import HomePage from "./pages/home";
-import NotFoundPage from "./pages/not-found";
-import SignInPage from "./pages/auth/signin";
-import CheckOutPage from "./pages/chekout";
-import ProductDetailPage from "./pages/product-detail";
-import ProductListPage from "./pages/product-list";
+import SignUpPage from "./ui/pages/auth/signup";
+import HomePage from "./ui/pages/home";
+import NotFoundPage from "./ui/pages/not-found";
+import SignInPage from "./ui/pages/auth/signin";
+import CheckOutPage from "./ui/pages/chekout";
+import ProductDetailPage from "./ui/pages/product-detail";
+import ProductListPage from "./ui/pages/product-list";
 import { useEffect } from "react";
-import PrivateLayout from "./components/layout/PrivateLayout";
-import PublicLayout from "./components/layout/PublicLayout";
+import PrivateLayout from "./ui/components/layout/PrivateLayout";
+import PublicLayout from "./ui/components/layout/PublicLayout";
 import { useAtom } from "jotai";
 import { userAtom } from "./store/user";
 import { loadingAtom } from "./store/loadiing";
-import { ApiClient } from "./core/api/apiClient";
+import { getMe } from "./core/controllers/userController";
 
 function App() {
     const [user, setUser] = useAtom(userAtom);
@@ -21,8 +21,8 @@ function App() {
     useEffect(() => {
         const fetch = async () => {
             try {
-                const response = await ApiClient.get("/user/getme");
-                const userObj = response.data.user;
+                const result = await getMe();
+                const userObj = result.user;
                 setUser(userObj);
                 setLoading(false);
             } catch (err) {

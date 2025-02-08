@@ -1,11 +1,8 @@
-import axios from "axios";
 import { useAtom } from "jotai";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; // 追加
-import { userAtom } from "../../../store/user";
-
-// クッキーも一緒にリクエスト送信
-axios.defaults.withCredentials = true;
+import { userAtom } from "../../../../store/user";
+import { logIn } from "../../../../core/controllers/authController";
 
 function SignInPage() {
     const navigate = useNavigate();
@@ -20,20 +17,16 @@ function SignInPage() {
 
     const onLogin = async () => {
         try {
-            const url = "http://localhost:3000/auth/login";
             const reqBody = {
                 ...valueObj,
             };
-            const response = await axios.post(url, reqBody);
-            if (response.status === 200) {
-                setValueObj({
-                    employee_number: "",
-                    password: "",
-                });
-                console.log("login", response.data.user);
-                setUser(response.data.user);
-                navigate("/");
-            }
+            const result = await logIn(reqBody);
+            setValueObj({
+                employee_number: "",
+                password: "",
+            });
+            setUser(result.user);
+            navigate("/");
         } catch (err) {
             console.error(err);
         }

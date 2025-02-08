@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { signUp } from "../../../../core/controllers/authController";
 
 function SignUpPage() {
     const navigate = useNavigate();
@@ -15,14 +15,13 @@ function SignUpPage() {
 
     const onSignup = async () => {
         try {
-            const url = "http://localhost:3000/auth/signup";
             const reqBody = {
                 ...valueObj,
                 name: "default_user",
                 role: "CUSTOMER",
             };
-            const response = await axios.post(url, reqBody);
-            if (response.status === 200) {
+            const result = await signUp(reqBody);
+            if (result) {
                 setValueObj({
                     employee_number: "",
                     password: "",

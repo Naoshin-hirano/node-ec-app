@@ -25,7 +25,6 @@ ApiClient.interceptors.response.use(
             case 404:
                 break;
             default:
-                alert("エラー！！！！");
                 console.log("== internal server error");
         }
 

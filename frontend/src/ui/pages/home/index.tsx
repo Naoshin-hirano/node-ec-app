@@ -1,20 +1,15 @@
-import axios from "axios";
-
 import { Link, useNavigate } from "react-router-dom"; // 追加
-import { userAtom } from "../../store/user";
+import { userAtom } from "../../../store/user";
 import { useAtom } from "jotai";
-
-// クッキーも一緒にリクエスト送信
-axios.defaults.withCredentials = true;
+import { logout } from "../../../core/controllers/authController";
 
 function HomePage() {
     const navigate = useNavigate();
     const [user, setUser] = useAtom(userAtom);
     const onLogout = () => {
         const fetch = async () => {
-            const url = "http://localhost:3000/auth/logout";
-            const response = await axios.post(url);
-            if (response.status === 200) {
+            const result = await logout();
+            if (result) {
                 setUser(null);
                 navigate("/signin");
             }
