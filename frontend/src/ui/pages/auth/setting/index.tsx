@@ -2,10 +2,19 @@ import { useAtom } from "jotai";
 import { Link, useNavigate } from "react-router-dom"; // 追加
 import { userAtom } from "../../../../store/user";
 import { deleteAccount } from "../../../../core/controllers/authController";
+import { useState } from "react";
+import { editMe } from "../../../../core/controllers/userController";
 
 function UserSettingPage() {
     const navigate = useNavigate();
     const [user, setUser] = useAtom(userAtom);
+    const [editUser, setEditUser] = useState({
+        name: user?.name,
+        role: user?.role,
+    });
+
+    const editableFlag =
+        user?.name !== editUser.name || user?.role !== editUser.role;
 
     const onDelete = async () => {
         try {
@@ -33,10 +42,62 @@ function UserSettingPage() {
             alert("メンバー退会に失敗しました");
         }
     };
+
+    const handleChange = (key: string, value: string) => {
+        setEditUser({ ...editUser, [key]: value });
+    };
+
+    const onEditUserInfo = async () => {
+        const reqBody = {
+            ...editUser,
+            employee_number: user?.employee_number,
+        };
+        try {
+            const result = await editMe(reqBody);
+            if (result) {
+                const newUserInfo = {
+                    ...result.user,
+                };
+                setUser(newUserInfo);
+                alert("ユーザー情報を更新しました");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("ユーザー情報の更新に失敗しました");
+        }
+    };
+
     return (
         <div className="Home">
             <h1>アカウント設定画面</h1>
-            <button onClick={onDelete}>アカウント退会</button>
+            <div style={{ marginBottom: "30px" }}>
+                <div>
+                    <input
+                        type="text"
+                        name="name"
+                        value={editUser.name}
+                        onChange={(e) => handleChange("name", e.target.value)}
+                    ></input>
+                </div>
+                <div>
+                    <select
+                        name="role"
+                        value={editUser.role}
+                        onChange={(e) => handleChange("role", e.target.value)}
+                    >
+                        <option value="CUSTOMER">CUSTOMER</option>
+                        <option value="ADMIN">ADMIN</option>
+                    </select>
+                </div>
+                <div>
+                    <button onClick={onEditUserInfo} disabled={!editableFlag}>
+                        ユーザー情報の変更
+                    </button>
+                </div>
+            </div>
+            <div>
+                <button onClick={onDelete}>アカウント退会</button>
+            </div>
             <div>
                 <Link to="/">Home画面へ</Link>
             </div>
