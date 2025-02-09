@@ -1,6 +1,6 @@
 import axios from "axios";
 // 環境変数よりエンドポイントを設定 (今回はhttps://jsonplaceholder.typicode.com)
-const baseURL = "http://localhost:3000";
+const baseURL = import.meta.env.VITE_BASE_URL;
 // 共通ヘッダー
 const headers = {
     "Content-Type": "application/json",
