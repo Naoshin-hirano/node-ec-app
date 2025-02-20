@@ -4,7 +4,6 @@ import * as cookieParser from 'cookie-parser';
 import * as session from 'express-session';
 import * as bodyParser from 'body-parser';
 import * as passport from 'passport';
-// import { ValidationPipe } from '@nestjs/common';
 import * as pgSession from 'connect-pg-simple';
 
 async function bootstrap() {
@@ -32,7 +31,6 @@ async function bootstrap() {
   );
   app.use(passport.initialize());
   app.use(passport.session());
-  //   app.useGlobalPipes(new ValidationPipe());
   app.use(bodyParser.urlencoded({ extended: true }));
   await app.listen(process.env.PORT ?? 3000);
 }
