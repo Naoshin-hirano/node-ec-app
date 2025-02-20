@@ -47,6 +47,7 @@ export class UserController {
     @Res() response: Response,
   ): Promise<void> {
     try {
+      console.log('テスト');
       await this.userService.update(editUserDto);
       session.user = {
         ...session.user,
