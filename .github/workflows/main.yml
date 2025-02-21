@@ -1,5 +1,8 @@
 name: Deploy
 
+run: |
+    curl https://cli-assets.heroku.com/install.sh | sh
+
 on:
     push:
         branches:
