@@ -1,8 +1,5 @@
 name: Deploy
 
-run: |
-    curl https://cli-assets.heroku.com/install.sh | sh
-
 on:
     push:
         branches:
@@ -15,7 +12,7 @@ jobs:
             - uses: actions/checkout@v2
             - uses: akhileshns/heroku-deploy@v3.12.12
               with:
-                  heroku_api_key: "HRKU-f6e91d63-46b8-4d24-9b27-908cf1fa64b6"
+                  heroku_api_key: ${{secrets.HEROKU_API_KEY}}
                   heroku_app_name: "node-ec-app"
-                  heroku_email: "hnaoya1120@gmail.com"
+                  heroku_email: ${{secrets.HEROKU_EMAIL}}
                   usedocker: true
