@@ -5,6 +5,10 @@ on:
         branches:
             - main
 
+        paths:
+            - "backend/**"
+            - ".github/workflows/main.yml"
+
 jobs:
     build:
         runs-on: ubuntu-latest
