@@ -19,6 +19,8 @@ jobs:
                   curl https://cli-assets.heroku.com/install.sh | sh
             - uses: akhileshns/heroku-deploy@v3.12.12
               with:
+                  cache-dependency-path: subdir/package-lock.json
+                  cache: "npm"
                   heroku_api_key: ${{secrets.HEROKU_API_KEY}}
                   heroku_app_name: "node-ec-app"
                   heroku_email: "hnaoya1120@gmail.com"
