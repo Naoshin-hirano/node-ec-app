@@ -17,7 +17,7 @@ jobs:
               uses: docker/build-push-action@v3
               with:
                   context: .
-                  file: ../backend/Dockerfile # Dockerfileのパスを指定
+                  file: ./backend/Dockerfile # Dockerfileのパスを指定
                   push: false
                   tags: user/image:latest
 
