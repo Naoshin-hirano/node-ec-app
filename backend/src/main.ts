@@ -7,7 +7,6 @@ import * as passport from 'passport';
 import * as pgSession from 'connect-pg-simple';
 
 async function bootstrap() {
-  console.log('ああああ');
   const app = await NestFactory.create(AppModule);
   app.enableCors({
     origin: process.env.CORS_ORIGIN_URL,
