@@ -19,7 +19,7 @@ jobs:
                   context: .
                   file: ./backend/Dockerfile # Dockerfileのパスを指定
                   push: true
-                  tags: Naoshin-hirano/node-ec-app:latest
+                  tags: node-ec-app:latest
 
             - uses: akhileshns/heroku-deploy@v3.12.12
               with:
