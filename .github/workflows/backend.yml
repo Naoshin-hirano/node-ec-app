@@ -12,6 +12,15 @@ jobs:
         runs-on: ubuntu-22.04
         steps:
             - uses: actions/checkout@v2
+
+            - name: Build Docker image
+              uses: docker/build-push-action@v3
+              with:
+                  context: .
+                  file: ../backend/Dockerfile # Dockerfileのパスを指定
+                  push: false
+                  tags: user/image:latest
+
             - uses: akhileshns/heroku-deploy@v3.12.12
               with:
                   heroku_api_key: ${{secrets.HEROKU_API_KEY}}
