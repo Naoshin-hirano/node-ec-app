@@ -13,20 +13,20 @@ jobs:
         # 複数のDockerfileが配置されたディレクトリを列挙
         strategy:
             matrix:
-                target: ["backend"]
-                steps:
-                    - uses: actions/checkout@v2
-                    - uses: akhileshns/heroku-deploy@v3.12.12
-                      with:
-                          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-                          heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
-                          heroku_email: ${{secrets.HEROKU_EMAIL}}
-                          buildpack: "https://github.com/lstoll/heroku-buildpack-monorepo.git,heroku/gradle" # 必要に応じて変更
-                          usedocker: true
-                    # 並列でContainer Imageをビルド
-                    - name: Build and push Docker image
-                      uses: docker/build-push-action@v2
-                      with:
-                          context: ./${{ matrix.target }}
-                          push: true
-                          tags: ghcr.io/cdsl-research/${{ matrix.target }}:${{ env.DOCKER_TAG }}
+            target: ["backend"]
+            steps:
+                - uses: actions/checkout@v2
+                - uses: akhileshns/heroku-deploy@v3.12.12
+                  with:
+                      heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+                      heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
+                      heroku_email: ${{secrets.HEROKU_EMAIL}}
+                      buildpack: "https://github.com/lstoll/heroku-buildpack-monorepo.git,heroku/gradle" # 必要に応じて変更
+                      usedocker: true
+                # 並列でContainer Imageをビルド
+                - name: Build and push Docker image
+                  uses: docker/build-push-action@v2
+                  with:
+                      context: ./${{ matrix.target }}
+                      push: true
+                      tags: ghcr.io/cdsl-research/${{ matrix.target }}:${{ env.DOCKER_TAG }}
