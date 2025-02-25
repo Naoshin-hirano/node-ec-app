@@ -25,6 +25,14 @@ jobs:
                   restore-keys: |
                       ${{ runner.os }}-buildx-
 
+            - name: Build Docker image
+              uses: docker/build-push-action@v3
+              with:
+                  context: .
+                  file: ./backend/Dockerfile # Dockerfileのパスを指定
+                  push: true
+                  tags: Naoshin-hirano/node-ec-app:latest
+
             - name: Log in to Heroku
               uses: akhileshns/heroku-deploy@v3.12.12
               with:
