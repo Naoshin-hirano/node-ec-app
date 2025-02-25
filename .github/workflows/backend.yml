@@ -42,6 +42,7 @@ jobs:
                   file: ./backend/Dockerfile # Dockerfileのパスを指定
                   push: true
                   tags: registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web:latest
+                  provenance: false
               env:
                   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
                   HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
