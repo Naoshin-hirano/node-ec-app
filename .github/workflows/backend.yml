@@ -31,7 +31,7 @@ jobs:
                   context: .
                   file: ./backend/Dockerfile # Dockerfileのパスを指定
                   push: true
-                  tags: Naoshin-hirano/node-ec-app:latest
+                  tags: registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
 
             - name: Log in to Heroku
               uses: akhileshns/heroku-deploy@v3.12.12
