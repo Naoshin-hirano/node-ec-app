@@ -25,6 +25,10 @@ jobs:
                   restore-keys: |
                       ${{ runner.os }}-buildx-
 
+            - name: Log in to Heroku Container Registry
+              run: |
+                  echo ${{ secrets.HEROKU_API_KEY }} | docker login --username=_ --password-stdin registry.heroku.com
+
             - name: Build Docker image
               uses: docker/build-push-action@v3
               with:
