@@ -35,6 +35,12 @@ jobs:
                   HEROKU_DB_URL=$(heroku config:get DATABASE_URL -a your-heroku-app-name)
                   echo "DATABASE_URL=${HEROKU_DB_URL}" >> $GITHUB_ENV
 
+            - name: Npm Install in Heroku DB
+              env:
+                  DATABASE_URL: ${{ env.DATABASE_URL }}
+              working-directory: ./backend
+              run: npm install
+
             - name: Run TypeORM migrations on Heroku DB
               env:
                   DATABASE_URL: ${{ env.DATABASE_URL }}
