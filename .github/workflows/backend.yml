@@ -28,3 +28,44 @@ jobs:
                   dockerfile_name: Dockerfile
                   docker_options: "--no-cache"
                   process_type: web
+
+            - name: Get Heroku PostgreSQL URL
+              id: heroku-db
+              run: |
+                  HEROKU_DB_URL=$(heroku config:get DATABASE_URL -a your-heroku-app-name)
+                  echo "DATABASE_URL=${HEROKU_DB_URL}" >> $GITHUB_ENV
+
+            - name: Run Docker container with PostgreSQL client
+              run: |
+                  docker run --rm \
+                      -e PGPASSWORD=$(echo $DATABASE_URL | sed -E 's/.*:([^@]*)@.*/\1/') \
+                      postgres \
+                      sh -c "psql $DATABASE_URL -c 'SELECT NOW();'"
+
+    # container-job:
+    #     runs-on: ubuntu-latest
+    #     container: node:20-bookworm-slim
+
+    #     services:
+    #         postgres:
+    #             image: postgres
+    #             env:
+    #                 POSTGRES_PASSWORD: pw
+    #             options: >-
+    #                 --health-cmd pg_isready
+    #                 --health-interval 10s
+    #                 --health-timeout 5s
+    #                 --health-retries 5
+
+    #     steps:
+    #         - name: Check out repository code
+    #           uses: actions/checkout@v3
+
+    #         - name: Install dependencies
+    #           run: npm ci
+
+    #         - name: Connect to PostgreSQL
+    #           run: node client.js
+    #           env:
+    #               POSTGRES_HOST: postgres
+    #               POSTGRES_PORT: 5432
