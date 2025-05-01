@@ -41,7 +41,7 @@ jobs:
               working-directory: ./backend
               run: |
                   echo "DATABASE_URL=$DATABASE_URL" > .env
-                  npm run typeorm migration:run
+                  npx typeorm-ts-node-commonjs migration:run -d src/database/database-source.ts
 
     # container-job:
     #     runs-on: ubuntu-latest
