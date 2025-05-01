@@ -35,12 +35,12 @@ jobs:
                   HEROKU_DB_URL=$(heroku config:get DATABASE_URL -a your-heroku-app-name)
                   echo "DATABASE_URL=${HEROKU_DB_URL}" >> $GITHUB_ENV
 
-            - name: Run Docker container with PostgreSQL client
+            - name: Run TypeORM migrations on Heroku DB
+              env:
+                  DATABASE_URL: ${{ env.DATABASE_URL }}
               run: |
-                  docker run --rm \
-                      -e PGPASSWORD=$(echo $DATABASE_URL | sed -E 's/.*:([^@]*)@.*/\1/') \
-                      postgres \
-                      sh -c "psql $DATABASE_URL -c 'SELECT NOW();'"
+                  echo "DATABASE_URL=$DATABASE_URL" > .env
+                  npm run typeorm migration:run
 
     # container-job:
     #     runs-on: ubuntu-latest
