@@ -41,38 +41,8 @@ jobs:
               working-directory: ./backend
               run: npm install
 
-            - name: Run TypeORM migrations on Heroku DB
+            - name: Run migrations on Heroku DB
               env:
                   DATABASE_URL: ${{ env.DATABASE_URL }}
               working-directory: ./backend
-              run: |
-                  echo "DATABASE_URL=$DATABASE_URL" > .env
-                  npx typeorm-ts-node-commonjs migration:run -d src/database/database-source.ts
-
-    # container-job:
-    #     runs-on: ubuntu-latest
-    #     container: node:20-bookworm-slim
-
-    #     services:
-    #         postgres:
-    #             image: postgres
-    #             env:
-    #                 POSTGRES_PASSWORD: pw
-    #             options: >-
-    #                 --health-cmd pg_isready
-    #                 --health-interval 10s
-    #                 --health-timeout 5s
-    #                 --health-retries 5
-
-    #     steps:
-    #         - name: Check out repository code
-    #           uses: actions/checkout@v3
-
-    #         - name: Install dependencies
-    #           run: npm ci
-
-    #         - name: Connect to PostgreSQL
-    #           run: node client.js
-    #           env:
-    #               POSTGRES_HOST: postgres
-    #               POSTGRES_PORT: 5432
+              run: npx prisma migrate deploy
