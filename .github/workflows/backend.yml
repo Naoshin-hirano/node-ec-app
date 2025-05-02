@@ -37,12 +37,17 @@ jobs:
 
             - name: Npm Install in Heroku DB
               env:
-                  DATABASE_URL: ${{ vars.DATABASE_URL }}
+                  DATABASE_URL: ${{ secrets.DATABASE_URL }}
               working-directory: ./backend
               run: npm install
 
             - name: Run TypeORM migrations on Heroku DB
               env:
-                  DATABASE_URL: ${{ vars.DATABASE_URL }}
+                  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+                  DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+                  DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+                  DATABASE_USER: ${{ secrets.DATABASE_USER }}
+                  DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+                  DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
               working-directory: ./backend
               run: npx typeorm-ts-node-commonjs migration:run -d src/database/database-source.ts
