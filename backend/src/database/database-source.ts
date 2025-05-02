@@ -12,4 +12,6 @@ export const AppDataSource = new DataSource({
   entities: [ENTITIES_DIR],
   synchronize: false,
   migrations: [MIGRATION_FILES_DIR],
+  url: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
 });
