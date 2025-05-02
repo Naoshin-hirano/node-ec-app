@@ -37,12 +37,12 @@ jobs:
 
             - name: Npm Install in Heroku DB
               env:
-                  DATABASE_URL: ${{ env.DATABASE_URL }}
+                  DATABASE_URL: ${{ vars.DATABASE_URL }}
               working-directory: ./backend
               run: npm install
 
-            - name: Run migrations on Heroku DB
+            - name: Run TypeORM migrations on Heroku DB
               env:
-                  DATABASE_URL: ${{ env.DATABASE_URL }}
+                  DATABASE_URL: ${{ vars.DATABASE_URL }}
               working-directory: ./backend
-              run: npx prisma migrate deploy
+              run: npx typeorm-ts-node-commonjs migration:run -d src/database/database-source.ts
