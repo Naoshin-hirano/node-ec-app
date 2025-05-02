@@ -43,6 +43,7 @@ jobs:
 
             - name: Run TypeORM migrations on Heroku DB
               env:
+                  NODE_TLS_REJECT_UNAUTHORIZED: 0
                   DATABASE_URL: ${{ secrets.DATABASE_URL }}
                   DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
                   DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
