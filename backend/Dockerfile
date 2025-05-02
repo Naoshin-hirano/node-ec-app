@@ -6,3 +6,9 @@ RUN npm i -g @nestjs/cli
 COPY package.json ./
 COPY package-lock.json ./
 RUN npm install
+# アプリケーションコードのコピー
+COPY . .
+# TypeScript をビルド（←これがないと dist/ ができません）
+RUN npm run build
+# アプリを起動
+CMD ["node", "dist/main.js"]
