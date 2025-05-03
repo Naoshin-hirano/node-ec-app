@@ -43,6 +43,7 @@ async function bootstrap() {
         path: '/',
         secure: process.env.NODE_ENV === 'production', // ローカルはfalse、本番はtrue
         httpOnly: true,
+        sameSite: 'none',
       },
     }),
   );
