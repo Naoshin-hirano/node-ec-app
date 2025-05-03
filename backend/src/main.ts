@@ -28,6 +28,9 @@ async function bootstrap() {
       store: new pgSessionStore({
         // DATABASE_URLを指定
         conString: process.env.DATABASE_URL,
+        ssl: {
+          rejectUnauthorized: false, // Heroku用
+        },
         // テーブルが存在しなければ新規作成する
         createTableIfMissing: true,
       }),
