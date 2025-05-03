@@ -5,9 +5,18 @@ import * as session from 'express-session';
 import * as bodyParser from 'body-parser';
 import * as passport from 'passport';
 import * as pgSession from 'connect-pg-simple';
+import { ExpressAdapter } from '@nestjs/platform-express';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import * as express from 'express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const server = express();
+  const app = await NestFactory.create<NestExpressApplication>(
+    AppModule,
+    new ExpressAdapter(server),
+  );
+
+  app.set('trust proxy', 1); // Herokuでは必要！
   app.enableCors({
     origin: process.env.CORS_ORIGIN_URL,
     credentials: true,
@@ -26,7 +35,11 @@ async function bootstrap() {
       secret: process.env.SESSION_SECRET,
       resave: false,
       saveUninitialized: false,
-      cookie: { path: '/', secure: false, httpOnly: true },
+      cookie: {
+        path: '/',
+        secure: process.env.NODE_ENV === 'production', // ローカルはfalse、本番はtrue
+        httpOnly: true,
+      },
     }),
   );
   app.use(passport.initialize());
