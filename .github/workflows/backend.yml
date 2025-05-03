@@ -1,24 +1,17 @@
-name: Deploy
+name: Deploy Backend
 
 on:
     push:
-        branches: [main]
+        branches:
+            - main
+        paths:
+            - "backend/**" # backendに変更のあった時のみ実行
 
 jobs:
-    build:
+    deploy:
         runs-on: ubuntu-latest
         steps:
-            - name: Install Heroku CLI
-              run: |
-                  curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
-                  heroku container:login
-              env:
-                  HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-
-            - name: Checkout
-              uses: actions/checkout@v3
-
-            - name: Build
+            - name: Deploy
               uses: gonuit/heroku-docker-deploy@v1.3.3
               with:
                   email: ${{ secrets.HEROKU_EMAIL }}
@@ -28,22 +21,3 @@ jobs:
                   dockerfile_name: Dockerfile
                   docker_options: "--no-cache"
                   process_type: web
-
-            - name: Get Heroku PostgreSQL URL
-              id: heroku-db
-              run: |
-                  HEROKU_DB_URL=$(heroku config:get DATABASE_URL -a your-heroku-app-name)
-                  echo "DATABASE_URL=${HEROKU_DB_URL}" >> $GITHUB_ENV
-
-            - name: Npm Install in Heroku DB
-              env:
-                  HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-              working-directory: ./backend
-              run: npm install
-
-            - name: Run migrations on Heroku
-              env:
-                  HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-              working-directory: ./backend
-              run: |
-                  heroku run "npx typeorm-ts-node-commonjs migration:run -d dist/database/database-source.js" --app ${{ secrets.HEROKU_APP_NAME }}

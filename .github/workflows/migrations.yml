@@ -1,0 +1,19 @@
+name: Migrations on Heroku
+
+on:
+    push:
+        branches:
+            - main
+        paths:
+            - "backend/src/database/migrations/**" # migrationsファイルに変更のあった時のみ実行
+
+jobs:
+    migrations:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Run migrations on Heroku
+              env:
+                  HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+              working-directory: ./backend
+              run: |
+                  heroku run "npx typeorm-ts-node-commonjs migration:run -d dist/database/database-source.js" --app ${{ secrets.HEROKU_APP_NAME }}
