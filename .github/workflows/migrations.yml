@@ -5,7 +5,7 @@ on:
         branches:
             - main
         paths:
-            - "backend/src/database/migrations/**" # migrationsファイルに変更のあった時のみ実行
+            - "backend/**" # backendに変更のあった時のみ実行
 
 jobs:
     migrations:
