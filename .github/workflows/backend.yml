@@ -11,6 +11,9 @@ jobs:
     deploy:
         runs-on: ubuntu-latest
         steps:
+            - name: Checkout source code
+              uses: actions/checkout@v3
+
             - name: Deploy
               uses: gonuit/heroku-docker-deploy@v1.3.3
               with:
