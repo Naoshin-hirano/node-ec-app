@@ -16,7 +16,7 @@ async function bootstrap() {
     new ExpressAdapter(server),
   );
 
-  app.set('trust proxy', 1); // Herokuでは必要
+  app.set('trust proxy', 1); // Herokuでは必須
   app.enableCors({
     origin: process.env.CORS_ORIGIN_URL,
     credentials: true,
