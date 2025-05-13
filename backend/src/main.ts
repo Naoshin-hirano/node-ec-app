@@ -16,11 +16,14 @@ async function bootstrap() {
     new ExpressAdapter(server),
   );
 
-  app.set('trust proxy', 1); // Herokuでは必須
+  // 最前段の1つのプロキシ（Heroku）を信頼 ＝ Herokuからのヘッダー（例：X-Forwarded-For, X-Forwarded-Proto）を信頼して使う
+  app.set('trust proxy', 1);
   app.enableCors({
     origin: process.env.CORS_ORIGIN_URL,
     credentials: true,
   });
+  // Cookie を解析し、req.cookies に格納（express-sessionがセッションIDを取り出すときに必要）
+  // なのでexpress-sessionより先に書く必要ある
   app.use(cookieParser());
   const pgSessionStore = pgSession(session);
   app.use(
@@ -28,8 +31,12 @@ async function bootstrap() {
       store: new pgSessionStore({
         conObject: {
           connectionString: process.env.DATABASE_URL, // DATABASE_URLを指定
+          // Heroku の PostgreSQL は外部からの接続に SSL を要求
+          // サーバー証明書の検証（CAチェック）をスキップしてSSL接続を許可
+          // SSLは使いつつ「証明書の完全性検証だけスキップ」する形にする
+          // TODO: trueにする設定にしないと中間者攻撃などの標的になるので要対応
           ssl: {
-            rejectUnauthorized: false, // HerokuのSSL設定
+            rejectUnauthorized: false,
           },
         },
         // テーブルが存在しなければ新規作成する
@@ -41,14 +48,22 @@ async function bootstrap() {
       saveUninitialized: false,
       cookie: {
         path: '/',
-        secure: process.env.NODE_ENV === 'production', // ローカルはfalse、本番はtrue
+        // trueにすると、HTTPSでアクセスしているときだけCookieがブラウザに送信される
+        // ローカルはfalse、本番はtrue
+        secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
+        // フロントエンドとバックエンドが別ドメイン
+        // secure: true も設定しないと拒否される
         sameSite: 'none',
       },
     }),
   );
+  // Passport を有効化（認証機能を使えるようにする）
   app.use(passport.initialize());
+  // リクエスト毎にセッション情報から実際のユーザーを取得してsession.userにユーザー情報をセット
   app.use(passport.session());
+  // POSTデータ（req.body)がオブジェクトの形にパースされる
+  // extended: true にすることでネストされたオブジェクトなど複雑なデータを扱える
   app.use(bodyParser.urlencoded({ extended: true }));
   await app.listen(process.env.PORT ?? 3000);
 }

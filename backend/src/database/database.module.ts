@@ -7,12 +7,14 @@ export const MIGRATION_FILES_DIR = 'dist/database/migrations/*.js';
 
 @Module({
   imports: [
+    // typeormの利用
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
         const isProduction = process.env.NODE_ENV === 'production';
         return {
           type: 'postgres',
+          // Herokuだとhostなどプロパティで設定できないのでurlで設定
           ...(isProduction
             ? {
                 url: configService.get<string>('DATABASE_URL'),

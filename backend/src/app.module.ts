@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
+    // .envの値を参照するため
     ConfigModule.forRoot({ isGlobal: true }),
     DatabaseModule,
     UserModule,
