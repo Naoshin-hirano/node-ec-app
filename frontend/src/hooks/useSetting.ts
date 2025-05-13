@@ -1,11 +1,11 @@
 import { useAtom } from "jotai";
-import { Link, useNavigate } from "react-router-dom"; // 追加
-import { userAtom } from "../../../../store/user";
-import { deleteAccount } from "../../../../core/controllers/authController";
+import { useNavigate } from "react-router-dom";
+import { userAtom } from "../store/user";
 import { useState } from "react";
-import { editMe } from "../../../../core/controllers/userController";
+import { deleteAccount } from "../core/controllers/authController";
+import { editMe } from "../core/controllers/userController";
 
-function UserSettingPage() {
+export const useSetting = () => {
     const navigate = useNavigate();
     const [user, setUser] = useAtom(userAtom);
     const [editUser, setEditUser] = useState({
@@ -67,42 +67,11 @@ function UserSettingPage() {
         }
     };
 
-    return (
-        <div className="Home">
-            <h1>アカウント設定画面</h1>
-            <div style={{ marginBottom: "30px" }}>
-                <div>
-                    <input
-                        type="text"
-                        name="name"
-                        value={editUser.name}
-                        onChange={(e) => handleChange("name", e.target.value)}
-                    ></input>
-                </div>
-                <div>
-                    <select
-                        name="role"
-                        value={editUser.role}
-                        onChange={(e) => handleChange("role", e.target.value)}
-                    >
-                        <option value="CUSTOMER">CUSTOMER</option>
-                        <option value="ADMIN">ADMIN</option>
-                    </select>
-                </div>
-                <div>
-                    <button onClick={onEditUserInfo} disabled={!editableFlag}>
-                        ユーザー情報の変更
-                    </button>
-                </div>
-            </div>
-            <div>
-                <button onClick={onDelete}>アカウント退会</button>
-            </div>
-            <div>
-                <Link to="/">Home画面へ</Link>
-            </div>
-        </div>
-    );
-}
-
-export default UserSettingPage;
+    return {
+        editUser,
+        editableFlag,
+        onDelete,
+        handleChange,
+        onEditUserInfo,
+    };
+};

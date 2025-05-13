@@ -1,21 +1,8 @@
-import { Link, useNavigate } from "react-router-dom"; // 追加
-import { userAtom } from "../../../store/user";
-import { useAtom } from "jotai";
-import { logout } from "../../../core/controllers/authController";
+import { Link } from "react-router-dom"; // 追加
+import { useHome } from "../../hooks/useHome";
 
 function HomePage() {
-    const navigate = useNavigate();
-    const [user, setUser] = useAtom(userAtom);
-    const onLogout = () => {
-        const fetch = async () => {
-            const result = await logout();
-            if (result) {
-                setUser(null);
-                navigate("/signin");
-            }
-        };
-        fetch();
-    };
+    const { user, onLogout } = useHome();
     return (
         <div className="Home">
             <h1>ホーム画面</h1>
