@@ -3,28 +3,27 @@ import { useHome } from "../../hooks/useHome";
 
 function HomePage() {
     const { user, onLogout } = useHome();
+    const menuList = [
+        { url: "/signup", msg: "signup画面へ" },
+        { url: "/signin", msg: "signin画面へ" },
+        { url: "userSetting", msg: "ユーザー設定画面へ" },
+        { url: "/checkout", msg: "checkout画面へ" },
+        { url: "/productDetail", msg: "商品詳細画面へ" },
+        { url: "/productList", msg: "商品一覧画面へ" },
+    ];
     return (
         <div className="Home">
             <h1>ホーム画面</h1>
             <div>
-                <div>
-                    <Link to="/signup">signup画面へ</Link>
-                </div>
-                <div>
-                    <Link to="/signin">signin画面へ</Link>
-                </div>
-                <div>
-                    <Link to="/userSetting">ユーザー設定画面へ</Link>
-                </div>
-                <div>
-                    <Link to="/checkout">checkout画面へ</Link>
-                </div>
-                <div>
-                    <Link to="/productDetail">商品詳細画面へ</Link>
-                </div>
-                <div>
-                    <Link to="/productList">商品一覧画面へ</Link>
-                </div>
+                {menuList.map(
+                    (item: { url: string; msg: string }, index: number) => {
+                        return (
+                            <div key={index}>
+                                <Link to={item.url}>{item.msg}</Link>
+                            </div>
+                        );
+                    }
+                )}
             </div>
             <div>
                 <div>
