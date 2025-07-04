@@ -15,7 +15,7 @@ function UserSettingPage() {
                         name="name"
                         value={editUser.name}
                         onChange={(e) => handleChange("name", e.target.value)}
-                    ></input>
+                    />
                 </div>
                 <div>
                     <select

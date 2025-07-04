@@ -13,23 +13,22 @@ import { useApp } from "./hooks/useApp";
 
 function App() {
     const { user, loading } = useApp();
-    return !loading ? (
+    if (loading) return <div>...loading</div>;
+    return (
         <Routes>
-            <Route element={<PrivateLayout isAuthenticated={user} />}>
-                <Route path="/" element={<HomePage />} />
+            <Route path="/" element={<PrivateLayout isAuthenticated={user} />}>
+                <Route index element={<HomePage />} />
                 <Route path="/checkout" element={<CheckOutPage />} />
-                <Route path="/productDetail" element={<ProductDetailPage />} />
-                <Route path="/productList" element={<ProductListPage />} />
-                <Route path="/userSetting" element={<UserSettingPage />} />
-                <Route path="*" element={<NotFoundPage />} />
+                <Route path="/product-detail" element={<ProductDetailPage />} />
+                <Route path="/product-list" element={<ProductListPage />} />
+                <Route path="/user-setting" element={<UserSettingPage />} />
             </Route>
             <Route element={<PublicLayout />}>
                 <Route path="/signup" element={<SignUpPage />} />
                 <Route path="/signin" element={<SignInPage />} />
             </Route>
+            <Route path="*" element={<NotFoundPage />} />
         </Routes>
-    ) : (
-        <div>loading...</div>
     );
 }
 
