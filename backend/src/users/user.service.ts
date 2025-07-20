@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
@@ -27,8 +31,12 @@ export class UserService {
   async update(editUserDto: EditUserDto) {
     const employee_number = editUserDto.employee_number;
     const user = await this.userRepository.findOneBy({ employee_number });
+    if (!user) throw new NotFoundException('ユーザーが見つかりません');
     user.name = editUserDto.name;
     user.role = editUserDto.role;
-    return this.userRepository.save(user);
+    const savedUser = this.userRepository.save(user);
+    if (!savedUser)
+      throw new InternalServerErrorException('ユーザー更新に失敗しました');
+    return savedUser;
   }
 }
