@@ -32,8 +32,8 @@ export default HomePage;
 const menuList = [
     { url: "/signup", msg: "signup画面へ" },
     { url: "/signin", msg: "signin画面へ" },
-    { url: "userSetting", msg: "ユーザー設定画面へ" },
+    { url: "/user-setting", msg: "ユーザー設定画面へ" },
     { url: "/checkout", msg: "checkout画面へ" },
-    { url: "/productDetail", msg: "商品詳細画面へ" },
-    { url: "/productList", msg: "商品一覧画面へ" },
+    { url: "/product-detail", msg: "商品詳細画面へ" },
+    { url: "/product-list", msg: "商品一覧画面へ" },
 ];
