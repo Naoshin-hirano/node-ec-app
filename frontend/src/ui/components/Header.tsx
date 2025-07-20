@@ -1,5 +1,5 @@
 import { useAtom } from "jotai";
-import { userAtom } from "../../../store/user";
+import { userAtom } from "../../store/user";
 
 export default function Header() {
     const [user] = useAtom(userAtom);

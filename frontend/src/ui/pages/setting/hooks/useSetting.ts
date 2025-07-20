@@ -1,9 +1,9 @@
 import { useAtom } from "jotai";
 import { useNavigate } from "react-router-dom";
-import { userAtom } from "../store/user";
 import { useState } from "react";
-import { deleteAccount } from "../core/controllers/authController";
-import { editMe } from "../core/controllers/userController";
+import { userAtom } from "../../../../store/user";
+import { deleteAccount } from "../../../../core/controllers/authController";
+import { editMe } from "../../../../core/controllers/userController";
 
 export const useSetting = () => {
     const navigate = useNavigate();

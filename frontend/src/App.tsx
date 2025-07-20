@@ -6,13 +6,34 @@ import SignInPage from "./ui/pages/signin";
 import CheckOutPage from "./ui/pages/checkout";
 import ProductDetailPage from "./ui/pages/product-detail";
 import ProductListPage from "./ui/pages/product-list";
-import PrivateLayout from "./ui/components/molecules/PrivateLayout";
-import PublicLayout from "./ui/components/molecules/PublicLayout";
+import PrivateLayout from "./ui/components/PrivateLayout";
+import PublicLayout from "./ui/components/PublicLayout";
 import UserSettingPage from "./ui/pages/setting";
-import { useApp } from "./hooks/useApp";
+import { useAtom } from "jotai";
+import { userAtom } from "./store/user";
+import { loadingAtom } from "./store/loadiing";
+import { useEffect } from "react";
+import { getMe } from "./core/controllers/userController";
 
 function App() {
-    const { user, loading } = useApp();
+    const [user, setUser] = useAtom(userAtom);
+    const [loading, setLoading] = useAtom(loadingAtom);
+
+    useEffect(() => {
+        const fetch = async () => {
+            try {
+                const result = await getMe();
+                const userObj = result.user;
+                setUser(userObj);
+                setLoading(false);
+            } catch (err) {
+                console.log(err);
+                setLoading(false);
+            }
+        };
+        fetch();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     if (loading) return <div>...loading</div>;
     return (
         <Routes>

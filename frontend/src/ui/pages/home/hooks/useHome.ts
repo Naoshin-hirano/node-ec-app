@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import { userAtom } from "../store/user";
 import { useAtom } from "jotai";
-import { logout } from "../core/controllers/authController";
+import { logout } from "../../../../core/controllers/authController";
+import { userAtom } from "../../../../store/user";
 
 export const useHome = () => {
     const navigate = useNavigate();

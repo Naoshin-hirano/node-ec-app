@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"; // 追加
-import { useSetting } from "../../hooks/useSetting";
+import { useSetting } from "./hooks/useSetting";
 
 function UserSettingPage() {
     const { editUser, editableFlag, onDelete, handleChange, onEditUserInfo } =
