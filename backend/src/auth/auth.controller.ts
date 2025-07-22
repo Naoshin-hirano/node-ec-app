@@ -1,15 +1,6 @@
-import {
-  Body,
-  Controller,
-  HttpCode,
-  HttpStatus,
-  Post,
-  Res,
-  Session,
-} from '@nestjs/common';
+import { Body, Controller, Post, Session } from '@nestjs/common';
 import { LocalStrategy } from 'src/common/localStrategy';
 import { UserService } from 'src/users/user.service';
-import { Response } from 'express';
 import { LogInUserDto } from 'src/users/dto/loginUser.dto';
 import { SignUpUserDto } from 'src/users/dto/signupUser.dto';
 import * as bcrypt from 'bcrypt';
@@ -22,68 +13,52 @@ export class AuthController {
   ) {}
 
   @Post('signup')
-  @HttpCode(HttpStatus.OK)
   async signUp(
     @Body() signUpUserDto: SignUpUserDto,
-    @Res() response: Response,
-  ) {
-    try {
-      const saltOrRounds = 10;
-      const password = signUpUserDto.password;
-      const hashedPassword = await bcrypt.hash(password, saltOrRounds);
-      const newSignUpUserDto = { ...signUpUserDto, password: hashedPassword };
-      await this.userService.save(newSignUpUserDto);
-      response.status(HttpStatus.OK).json({ message: 'メンバー登録完了' });
-    } catch (err) {
-      throw new Error(err);
-    }
+  ): Promise<{ message: string }> {
+    const saltOrRounds = 10;
+    const password = signUpUserDto.password;
+    const hashedPassword = await bcrypt.hash(password, saltOrRounds);
+    const newSignUpUserDto = { ...signUpUserDto, password: hashedPassword };
+    await this.userService.save(newSignUpUserDto);
+    return { message: 'メンバー登録完了' };
   }
 
   @Post('delete')
-  @HttpCode(HttpStatus.OK)
   async delete(
     @Body() employee_number: string,
     @Session() session: Record<string, any>,
-    @Res() response: Response,
   ) {
-    try {
-      await this.userService.delete(employee_number);
-      session.destroy();
-      response.status(HttpStatus.OK).json({ message: 'メンバー退会完了' });
-    } catch (err) {
-      throw new Error(err);
-    }
+    await this.userService.delete(employee_number);
+    session.destroy();
+    return { message: 'メンバー退会完了' };
   }
 
   @Post('login')
-  @HttpCode(HttpStatus.OK)
   async logIn(
     @Body() logInUserDto: LogInUserDto,
     @Session() session: Record<string, any>,
-    @Res() response: Response,
   ) {
     const user = await this.localStrategy.validate(
       logInUserDto.employee_number,
       logInUserDto.password,
     );
     session.user = user;
-    response.status(HttpStatus.OK).json({
+    return {
       user: {
         id: user.id,
         name: user.name,
         employee_number: user.employee_number,
         role: user.role,
       },
-    });
+    };
   }
 
   @Post('logout')
-  @HttpCode(HttpStatus.OK)
   async logout(
     @Session() session: Record<string, any>,
-    @Res() response: Response,
-  ): Promise<void> {
+  ): Promise<{ message: string }> {
     session.destroy();
-    response.status(HttpStatus.OK).json({ message: 'ログアウト成功' });
+    return { message: 'ログアウト成功' };
   }
 }
